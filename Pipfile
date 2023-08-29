@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 flask = "*"
+langchain = "*"
+pymysql = "*"
+langchain-experimental = "*"
+openai = "*"
 
 [dev-packages]
 

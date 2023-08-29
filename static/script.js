@@ -30,13 +30,6 @@ const schedule = {
     'historia': ['Martes', 'Jueves'],
 };
 
-submitButton.addEventListener('click', () => {
-    const question = questionInput.value.toLowerCase();
-    addUserMessage(question);
-    processQuestion(question);
-    questionInput.value = ''; 
-});
-
 function addUserMessage(message) {
     const userMessage = createMessageElement(message, 'user-message', 'fas fa-user');
     chatBox.appendChild(userMessage);
@@ -66,23 +59,20 @@ function createMessageElement(content, className, iconClass) {
 }
 
 function processQuestion(question) {
-    const subjects = Object.keys(schedule);
-    const matchingSubjects = subjects.filter(subject => question.includes(subject));
-
-    let answer = '';
-
-    if (matchingSubjects.length > 0) {
-        answer = 'Tienes ' + matchingSubjects.join(', ') + ' los dias: ';
-
-        const days = [];
-        matchingSubjects.forEach(subject => {
-            days.push(...schedule[subject]);
-        });
-
-        answer += [...new Set(days)].join(', ');
-        addBotMessage(answer);
-    } else {
-        answer = 'No encontre ninguna materia coincidente en tu pregunta.';
-        addBotMessage(answer);
-    }
+    // POST to /api/question
+    fetch('/api/question', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        addBotMessage(data.answer);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
