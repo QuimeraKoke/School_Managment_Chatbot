@@ -17,7 +17,7 @@ def index():
 @app.route('/api/question', methods=['POST'])
 def chat_api():
     question = request.json.get('question')
-    llm = OpenAI(temperature=0, openai_api_key="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",
+    llm = OpenAI(temperature=0, openai_api_key="",
                  model_name='gpt-3.5-turbo')
     db_chain = SQLDatabaseChain(llm=llm, database=db, verbose=True)
     PROMPT = """ 
